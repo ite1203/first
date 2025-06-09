@@ -410,16 +410,6 @@
             console.log('레시피 세션 시작:', sessionId);
         };
     
-  function checkCompletion(recipeId) {
-    const container = document.getElementById(`recipe-${recipeId}`);
-    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-
-    if (allChecked) {
-      alert("요리를 모두 완료하셨습니다! 🎉");
-    } else {
-      alert("아직 체크되지 않은 항목이 있습니다.");
-    }
   }
 
   function monitorCheckboxes(recipeId) {
