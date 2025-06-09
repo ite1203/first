@@ -73,6 +73,8 @@
           <li><input type="checkbox" id="eggStep2"><label for="eggStep2">밥에 버터와 간장을 넣어 비빕니다.</label></li>
           <li><input type="checkbox" id="eggStep3"><label for="eggStep3">반숙 달걀을 올리고 김가루·깨소금을 뿌립니다.</label></li>
         </ol>
+        <!-- 간장버터 계란밥 섹션의 끝부분에 추가 -->
+<button id="complete-egg" onclick="checkCompletion('egg')" disabled>✅ 완료</button>
       </div>
       <div id="recipe-tuna" class="recipe-content hidden">
         <div class="recipe-header">
@@ -407,6 +409,45 @@
         window.onload = function() {
             console.log('레시피 세션 시작:', sessionId);
         };
+    
+  function checkCompletion(recipeId) {
+    const container = document.getElementById(`recipe-${recipeId}`);
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+
+    if (allChecked) {
+      alert("요리를 모두 완료하셨습니다! 🎉");
+    } else {
+      alert("아직 체크되지 않은 항목이 있습니다.");
+    }
+  }
+
+  function monitorCheckboxes(recipeId) {
+    const container = document.getElementById(`recipe-${recipeId}`);
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    const button = document.getElementById(`complete-${recipeId}`);
+
+    checkboxes.forEach(cb => {
+      cb.addEventListener('change', () => {
+        const allChecked = Array.from(checkboxes).every(c => c.checked);
+        button.disabled = !allChecked;
+      });
+    });
+  }
+
+  function selectRecipe() {
+    // 기존 레시피 숨기기
+    document.querySelectorAll('.recipe-content').forEach(div => {
+      div.classList.add('hidden');
+    });
+
+    const selected = document.getElementById("recipeSelector").value;
+    if (selected) {
+      const container = document.getElementById(`recipe-${selected}`);
+      container.classList.remove('hidden');
+      monitorCheckboxes(selected); // 체크 모니터링 시작
+    }
+  }
 
   </script>
 </body>
