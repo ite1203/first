@@ -351,9 +351,15 @@
             console.log('기록된 행동:', actionData);
         }
 
-        // 완료 데이터 저장
-        function saveRecipeData() 
-
+         // 완료 데이터 저장
+        function saveRecipeData() {
+            // 완료된 단계 확인
+            const completedSteps = [];
+            for (let i = 1; i <= 4; i++) {
+                const checkbox = document.querySelector(`#step${i} .step-checkbox`);
+                if (checkbox.checked) {
+                    completedSteps.push(i);
+                }
             // 저장할 데이터
             const recipeData = {
                 sessionId: sessionId,
