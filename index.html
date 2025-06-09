@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>자취생을 위한 레시피북</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
+    .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+    h1 { color: #2c3e50; text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+    select { width:100%; padding:10px; margin:15px 0; border-radius:5px; border:1px solid #ccc; font-size:16px; }
+    .hidden { display:none; }
+    .recipe-header { background:#ecf0f1; padding:15px; border-radius:5px; margin-bottom:20px; text-align:center; }
+    .recipe-content p { margin:10px 0; }
+    ul, ol { padding-left:20px; }
+    li { margin-bottom:8px; cursor: pointer; user-select:none; position: relative; }
+    li input[type="checkbox"] { display:none; }
+    li label { position:relative; padding-left:25px; cursor:pointer; display:inline-block; vertical-align:middle; }
+    li label::before { content:""; position:absolute; left:0; top:2px; width:18px; height:18px;
+      border:2px solid #3498db; border-radius:4px; background:white; box-sizing:border-box; transition:background .2s; }
+    li input[type="checkbox"]:checked + label::before { background:#3498db; border-color:#2980b9; }
+    li input[type="checkbox"]:checked + label::after { content:"✓"; position:absolute; left:4px; top:0;
+      color:white; font-weight:bold; font-size:16px; }
+    li input[type="checkbox"]:checked + label { text-decoration: line-through; color: gray; }
+    #timerSection { margin-top:40px; padding:15px; border:2px solid #3498db; border-radius:8px;
+      background-color:#eaf3fc; text-align:center; font-size:18px; color:#2c3e50; user-select:none; }
+    #timerDisplay { font-weight:bold; font-size:24px; margin-top:10px; }
+    #timerControls button { margin:5px 10px; padding:8px 16px; font-size:16px; border:none;
+      border-radius:5px; background-color:#3498db; color:white; cursor:pointer; transition:background-color .3s; }
+    #timerControls button:hover { background-color:#2980b9; }
+    
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>자취생을 위한 레시피북</h1>
+    
+    <select id="recipeSelector" onchange="selectRecipe()">
+      <option value="">레시피를 선택하세요</option>
+      <option value="egg">간장버터 계란밥</option>
+      <option value="tuna">참치마요 덮밥</option>
+      <option value="kimchi">김치볶음밥</option>
+      <option value="bacon">베이컨 브로콜리 볶음</option>
+      <option value="cabbage">양배추 계란볶음</option>
+      <option value="tofu">두부 스크램블</option>
+      <option value="omelet">떡볶이 오므라이스</option>
+      <option value="spam">스팸 야채볶음</option>
+      <option value="dumpling">만두채소볶음</option>
+      <option value="mushroom">버섯 간장볶음</option>
+    </select>
+    
+    
+    <div id="recipeContainer">
+      <div id="recipe-egg" class="recipe-content hidden">
+        <div class="recipe-header">
+          <h2>간장버터 계란밥</h2>
+          <p><strong>소요시간:</strong> 약 10분 | <strong>요리법:</strong> 볶음</p>
+        </div>
+        <p><strong>재료 (1인분):</strong></p>
+        <ul>
+          <li><input type="checkbox" id="egg1"><label for="egg1">밥 1공기</label></li>
+          <li><input type="checkbox" id="egg2"><label for="egg2">달걀 1개</label></li>
+          <li><input type="checkbox" id="egg3"><label for="egg3">간장 1큰술</label></li>
+          <li><input type="checkbox" id="egg4"><label for="egg4">버터 1작은술</label></li>
+          <li><input type="checkbox" id="egg5"><label for="egg5">참기름 약간</label></li>
+          <li><input type="checkbox" id="egg6"><label for="egg6">김가루, 깨소금 (선택)</label></li>
+        </ul>
+        <p><strong>조리 순서:</strong></p>
+        <ol>
+          <li><input type="checkbox" id="eggStep1"><label for="eggStep1">달걀을 반숙으로 부칩니다.</label></li>
+          <li><input type="checkbox" id="eggStep2"><label for="eggStep2">밥에 버터와 간장을 넣어 비빕니다.</label></li>
+          <li><input type="checkbox" id="eggStep3"><label for="eggStep3">반숙 달걀을 올리고 김가루·깨소금을 뿌립니다.</label></li>
+        </ol>
+      </div>
+      <div id="recipe-tuna" class="recipe-content hidden">
+        <div class="recipe-header">
+          <h2>참치마요 덮밥</h2>
+          <p><strong>소요시간:</strong> 약 10분 | <strong>요리법:</strong> 비빔</p>
+        </div>
+        <p><strong>재료 (1인분):</strong></p>
+        <ul>
+          <li><input type="checkbox" id="tuna1"><label for="tuna1">밥 1공기</label></li>
+          <li><input type="checkbox" id="tuna2"><label for="tuna2">참치캔 1개</label></li>
+          <li><input type="checkbox" id="tuna3"><label for="tuna3">마요네즈 1.5큰술</label></li>
+          <li><input type="checkbox" id="tuna4"><label for="tuna4">간장 1작은술</label></li>
+          <li><input type="checkbox" id="tuna5"><label for="tuna5">쪽파, 김가루 (선택)</label></li>
+        </ul>
+        <p><strong>조리 순서:</strong></p>
+        <ol>
+          <li><input type="checkbox" id="tunaStep1"><label for="tunaStep1">참치 기름을 빼고 마요네즈·간장과 섞습니다.</label></li>
+          <li><input type="checkbox" id="tunaStep2"><label for="tunaStep2">밥 위에 참치 섞은 걸 얹습니다.</label></li>
+          <li><input type="checkbox" id="tunaStep3"><label for="tunaStep3">쪽파·김가루로 장식합니다.</label></li>
+        </ol>
+      </div>
+      <div id="recipe-kimchi" class="recipe-content hidden">
+        <div class="recipe-header">
+          <h2>김치볶음밥</h2>
+          <p><strong>소요시간:</strong> 약 15분 | <strong>요리법:</strong> 볶음</p>
+        </div>
+        <p><strong>재료 (1인분):</strong></p>
+        <ul>
+          <li><input type="checkbox" id="kimchi1"><label for="kimchi1">김치 1/2컵</label></li>
+          <li><input type="checkbox" id="kimchi2"><label for="kimchi2">밥 1공기</label></li>
+          <li><input type="checkbox" id="kimchi3"><label for="kimchi3">대파 약간</label></li>
+          <li><input type="checkbox" id="kimchi4"><label for="kimchi4">참기름 1작은술</label></li>
+          <li><input type="checkbox" id="kimchi5"><label for="kimchi5">고추장 1큰술</label></li>
+          <li><input type="checkbox" id="kimchi6"><label for="kimchi6">설탕 1/2작은술</label></li>
+          <li><input type="checkbox" id="kimchi7"><label for="kimchi7">계란 1개 (선택)</label></li>
+        </ul>
+        <p><strong>조리 순서:</strong></p>
+        <ol>
+          <li><input type="checkbox" id="kimchiStep1"><label for="kimchiStep1">팬에 대파와 김치를 볶아 향을 냅니다.</label></li>
+          <li><input type="checkbox" id="kimchiStep2"><label for="kimchiStep2">밥, 고추장, 설탕을 넣고 볶습니다.</label></li>
+          <li><input type="checkbox" id="kimchiStep3"><label for="kimchiStep3">참기름을 넣고 섞은 뒤, 원하면 계란후라이를 올립니다.</label></li>
+        </ol>
+      </div>
+      <div id="recipe-bacon" class="recipe-content hidden">
+        <div class="recipe-header">
+          <h2>베이컨 브로콜리 볶음</h2>
+          <p><strong>소요시간:</strong> 약 15분 | <strong>요리법:</strong> 볶음</p>
+        </div>
+        <p><strong>재료 (1~2인분):</strong></p>
+        <ul>
+          <li><input type="checkbox" id="bacon1"><label for="bacon1">베이컨 100g</label></li>
+          <li><input type="checkbox" id="bacon2"><label for="bacon2">브로콜리 150g</label></li>
+          <li><input type="checkbox" id="bacon3"><label for="bacon3">마늘 2쪽</label></li>
+          <li><input type="checkbox" id="bacon4"><label for="bacon4">올리브유 1큰술</label></li>
+          <li><input type="checkbox" id="bacon5"><label for="bacon5">후추 약간</label></li>
+          <li><input type="checkbox" id="bacon6"><label for="bacon6">소금 약간</label></li>
+        </ul>
+        <p><strong>조리 순서:</strong></p>
+        <ol>
+          <li><input type="checkbox" id="baconStep1"><label for="baconStep1">브로콜리를 데쳐서 준비합니다.</label></li>
+          <li><input type="checkbox" id="baconStep2"><label for="baconStep2">팬에 올리브유와 다진 마늘을 넣고 볶습니다.</label></li>
+          <li><input type="checkbox" id="baconStep3"><label for="baconStep3">베이컨을 넣고 노릇하게 볶습니다.</label></li>
+          <li><input type="checkbox" id="baconStep4"><label for="baconStep4">브로콜리를 넣고 소금, 후추로 간 맞춰 볶아 마무리합니다.</label></li>
+        </ol>
+      </div>
+      <div id="recipe-cabbage" class="recipe-content hidden">
+        <div class="recipe-header">
+          <h2>양배추 계란볶음</h2>
+          <p><strong>소요시간:</strong> 약 10분</p><p><strong>요리법:</strong> 볶음</p>
+        </div>
+        <p><strong>재료 (1인분):</strong></p>
+        <ul>
+          <li><input type="checkbox" id="cabbage1"><label for="cabbage1">양배추 1컵 (채 썬 것)</label></li>
+          <li><input type="checkbox" id="cabbage2"><label for="cabbage2">달걀 2개</label></li>
+          <li><input type="checkbox" id="cabbage3"><label for="cabbage3">소금, 후추 약간</label></li>
+          <li><input type="checkbox" id="cabbage4"><label for="cabbage4">식용유 1큰술</label></li>
+        </ul>
+        <p><strong>조리 순서:</strong></p>
+        <ol>
+          <li><input type="checkbox" id="cabbageStep1"><label for="cabbageStep1">팬에 기름 두르고 양배추를 볶아 숨이 죽을 때까지 익힙니다.</label></li>
+          <li><input type="checkbox" id="cabbageStep2"><label for="cabbageStep2">계란을 넣고 스크램블하듯 볶습니다.</label></li>
+          <li><input type="checkbox" id="cabbageStep3"><label for="cabbageStep3">소금·후추로 간합니다.</label></li>
+        </ol>
+      </div>
+      <div id="recipe-tofu" class="recipe-content hidden">
+        <div class="recipe-header">
+          <h2>두부 스크램블</h2>
+          <p><strong>소요시간:</strong> 약 10분</p>
+    <p><strong>요리법:</strong> 볶음</p>
+        </div>
+        <p><strong>재료 (1인분):</strong></p>
+        <ul>
+          <li><input type="checkbox" id="tofu1"><label for="tofu1">부드러운 두부 1/2모</label></li>
+          <li><input type="checkbox" id="tofu2"><label for="tofu2">양파 1/4개</label></li>
+          <li><input type="checkbox" id="tofu3"><label for="tofu3">당근, 대파 약간</label></li>
+          <li><input type="checkbox" id="tofu4"><label for="tofu4">간장 1작은술</label></li>
+          <li><input type="checkbox" id="tofu5"><label for="tofu5">참기름, 후추 약간</label></li>
+        </ul>
+        <p><strong>조리 순서:</strong></p>
+        <ol>
+          <li><input type="checkbox" id="tofuStep1"><label for="tofuStep1">두부는 물기를 빼고 으깹니다.</label></li>
+          <li><input type="checkbox" id="tofuStep2"><label for="tofuStep2">팬에 기름 두르고 채소를 볶습니다.</label></li>
+          <li><input type="checkbox" id="tofuStep3"><label for="tofuStep3">두부 넣고 간장으로 간합니다.</label></li>
+          <li><input type="checkbox" id="tofuStep4"><label for="tofuStep4">참기름·후추로 마무리합니다.</label></li>
+        </ol>
+      </div>
+      <div id="recipe-omelet" class="recipe-content hidden">
+        <div class="recipe-header">
+          <h2>떡볶이 오므라이스</h2>
+          <p><strong>소요시간:</strong> 약 20분</p>
+    <p><strong>요리법:</strong> 볶음 + 달걀 감싸기</p>
+        </div>
+        <p><strong>재료 (1인분):</strong></p>
+        <ul>
+          <li><input type="checkbox" id="omelet1"><label for="omelet1">밥 1공기</label></li>
+          <li><input type="checkbox" id="omelet2"><label for="omelet2">떡볶이 소스 2큰술</label></li>
+          <li><input type="checkbox" id="omelet3"><label for="omelet3">양파 1/4개</label></li>
+          <li><input type="checkbox" id="omelet4"><label for="omelet4">당근 약간</label></li>
+          <li><input type="checkbox" id="omelet5"><label for="omelet5">달걀 2개</label></li>
+          <li><input type="checkbox" id="omelet6"><label for="omelet6">식용유, 소금 약간</label></li>
+        </ul>
+        <p><strong>조리 순서:</strong></p>
+        <ol>
+          <li><input type="checkbox" id="omeletStep1"><label for="omeletStep1">채소 볶다가 밥과 떡볶이 소스를 넣습니다.</label></li>
+          <li><input type="checkbox" id="omeletStep2"><label for="omeletStep2">달걀 풀어 지단 부칩니다.</label></li>
+          <li><input type="checkbox" id="omeletStep3"><label for="omeletStep3">지단에 볶은 밥을 얹고 감쌉니다.</label></li>
+        </ol>
+      </div>
+      <div id="recipe-spam" class="recipe-content hidden">
+        <div class="recipe-header">
+          <h2>스팸 야채볶음</h2>
+           <p><strong>소요시간:</strong> 약 15분</p>
+    <p><strong>요리법:</strong> 볶음</p>
+        </div>
+        <p><strong>재료 (1~2인분):</strong></p>
+        <ul>
+          <li><input type="checkbox" id="spam1"><label for="spam1">스팸 1/2캔</label></li>
+          <li><input type="checkbox" id="spam2"><label for="spam2">양파 1/4개</label></li>
+          <li><input type="checkbox" id="spam3"><label for="spam3">피망 또는 파프리카 약간</label></li>
+          <li><input type="checkbox" id="spam4"><label for="spam4">식용유 약간</label></li>
+          <li><input type="checkbox" id="spam5"><label for="spam5">후추 약간</label></li>
+        </ul>
+        <p><strong>조리 순서:</strong></p>
+        <ol>
+          <li><input type="checkbox" id="spamStep1"><label for="spamStep1">스팸 썰고 채소 썰어둡니다.</label></li>
+          <li><input type="checkbox" id="spamStep2"><label for="spamStep2">팬에 스팸 먼저 볶고 기름 나오면 채소 넣습니다.</label></li>
+          <li><input type="checkbox" id="spamStep3"><label for="spamStep3">후추로 간하고 마무리합니다.</label></li>
+        </ol>
+      </div>
+      <div id="recipe-dumpling" class="recipe-content hidden">
+        <div class="recipe-header">
+          <h2>만두채소볶음</h2>
+          <p><strong>소요시간:</strong> 약 15분</p>
+    <p><strong>요리법:</strong> 볶음</p>
+        </div>
+        <p><strong>재료 (1~2인분):</strong></p>
+        <ul>
+          <li><input type="checkbox" id="dumpling1"><label for="dumpling1">만두 4~5개</label></li>
+          <li><input type="checkbox" id="dumpling2"><label for="dumpling2">양배추, 당근, 양파 등 채소</label></li>
+          <li><input type="checkbox" id="dumpling3"><label for="dumpling3">간장 1큰술</label></li>
+          <li><input type="checkbox" id="dumpling4"><label for="dumpling4">식용유, 참기름 약간</label></li>
+        </ul>
+        <p><strong>조리 순서:</strong></p>
+        <ol>
+          <li><input type="checkbox" id="dumplingStep1"><label for="dumplingStep1">만두를 살짝 구워둡니다.</label></li>
+          <li><input type="checkbox" id="dumplingStep2"><label for="dumplingStep2">채소 볶다가 만두 넣고 간장 간합니다.</label></li>
+          <li><input type="checkbox" id="dumplingStep3"><label for="dumplingStep3">참기름으로 마무리합니다.</label></li>
+        </ol>
+      </div>
+      <div id="recipe-mushroom" class="recipe-content hidden">
+        <div class="recipe-header">
+          <h2>버섯 간장볶음</h2>
+          <p><strong>소요시간:</strong> 약 10분</p>
+    <p><strong>요리법:</strong> 볶음</p>
+        </div>
+        <p><strong>재료 (1인분):</strong></p>
+        <ul>
+          <li><input type="checkbox" id="mushroom1"><label for="mushroom1">버섯 1컵</label></li>
+          <li><input type="checkbox" id="mushroom2"><label for="mushroom2">간장 1큰술</label></li>
+          <li><input type="checkbox" id="mushroom3"><label for="mushroom3">설탕 1작은술</label></li>
+          <li><input type="checkbox" id="mushroom4"><label for="mushroom4">다진 마늘 1/2작은술</label></li>
+          <li><input type="checkbox" id="mushroom5"><label for="mushroom5">식용유 1큰술</label></li>
+          <li><input type="checkbox" id="mushroom6"><label for="mushroom6">참기름, 깨소금 약간</label></li>
+        </ul>
+        <p><strong>조리 순서:</strong></p>
+        <ol>
+          <li><input type="checkbox" id="mushroomStep1"><label for="mushroomStep1">팬에 기름 두르고 마늘 볶습니다.</label></li>
+          <li><input type="checkbox" id="mushroomStep2"><label for="mushroomStep2">버섯 넣고 숨이 죽을 때까지 볶습니다.</label></li>
+          <li><input type="checkbox" id="mushroomStep3"><label for="mushroomStep3">간장·설탕 넣고 볶아 간을 맞춥니다.</label></li>
+          <li><input type="checkbox" id="mushroomStep4"><label for="mushroomStep4">불 끄고 참기름·깨소금 넣어 마무리합니다.</label></li>
+        </ol>
+      </div>
+    
+    <div id="timerSection" class="hidden">
+      <p>타이머</p>
+      <div id="timerDisplay">00:00</div>
+      <div id="timerControls">
+        <button onclick="startTimer()">시작</button>
+        <button onclick="pauseTimer()">일시정지</button>
+        <button onclick="resetTimer()">초기화</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const recipes = {
+      egg: { time:10 }, tuna: { time:10 }, kimchi: { time:15 }, bacon: { time:15 },
+      cabbage: { time:10 }, tofu: { time:10 }, omelet: { time:20 },
+      spam: { time:15 }, dumpling: { time:15 }, mushroom: { time:10 }
+    };
+
+    function selectRecipe() {
+      document.querySelectorAll('.recipe-content').forEach(el=>el.classList.add('hidden'));
+      resetTimer();
+      document.getElementById('timerSection').classList.add('hidden');
+      const sel = document.getElementById('recipeSelector').value;
+      if (!sel) return;
+      document.getElementById('recipe-' + sel).classList.remove('hidden');
+      document.getElementById('timerSection').classList.remove('hidden');
+      currentTime = recipes[sel].time * 60;
+      updateTimerDisplay();
+      document.querySelectorAll('#recipe-' + sel + ' input[type=checkbox]').forEach(cb=>cb.checked=false);
+    }
+
+    let timerInterval = null, currentTime = 0, isRunning = false;
+    function updateTimerDisplay() {
+      const m = String(Math.floor(currentTime/60)).padStart(2,'0');
+      const s = String(currentTime%60).padStart(2,'0');
+      document.getElementById('timerDisplay').textContent = `${m}:${s}`;
+    }
+    function startTimer() { if(isRunning||currentTime<=0) return; isRunning=true;
+      timerInterval = setInterval(()=>{ if(currentTime>0){currentTime--;updateTimerDisplay()}
+      else{clearInterval(timerInterval);isRunning=false;alert('타이머 종료!');}},1000);
+    }
+    function pauseTimer() { if(!isRunning) return; clearInterval(timerInterval); isRunning=false; }
+    function resetTimer() { clearInterval(timerInterval); isRunning=false;
+      const sel = document.getElementById('recipeSelector').value;
+      currentTime = (recipes[sel]?.time||0)*60;
+      updateTimerDisplay();
+    }
+    window.onload = ()=>updateTimerDisplay();
+  </script>
+    
+</body>
+</html>
+
+
+</html>
