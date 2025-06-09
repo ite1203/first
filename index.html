@@ -326,15 +326,8 @@
     }
     window.onload = ()=>updateTimerDisplay();
 
-  
 
-        // 페이지 로드 시 시작
-        window.onload = function() {
-            console.log('레시피 세션 시작:', sessionId);
-        };
-    
   }
-
   function monitorCheckboxes(recipeId) {
     const container = document.getElementById(`recipe-${recipeId}`);
     const checkboxes = container.querySelectorAll('input[type="checkbox"]');
