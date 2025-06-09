@@ -323,7 +323,94 @@
       updateTimerDisplay();
     }
     window.onload = ()=>updateTimerDisplay();
+
+  
+    // =============================================
+        // 데이터 수집 기능 (간단 버전)
+        // =============================================
+        
+        // Google Apps Script URL (학생들이 설정)
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZSTMny2G7slCgUfEyCAaic0Av_dSOZtqXZkoChmTAF58ehL3pzo7T_eptveRMHeE/exec';
+        
+        // 사용자 행동 로그
+        let userActions = [];
+        let sessionId = 'recipe_' + Date.now();
+        let startTime = Date.now();
+
+        // 사용자 행동 기록
+        function logUserAction(action, value) {
+            const actionData = {
+                time: new Date().toLocaleTimeString(),
+                action: action,
+                value: value,
+                timeFromStart: Math.round((Date.now() - startTime) / 1000) // 초 단위
+            };
+            
+            userActions.push(actionData);
+            console.log('기록된 행동:', actionData);
+        }
+
+        // 완료 데이터 저장
+        function saveRecipeData() {
+            // 완료된 단계 확인
+            const completedSteps = [];
+            for (let i = 1; i <= 4; i++) {
+                const checkbox = document.querySelector(`#step${i} .step-checkbox`);
+                if (checkbox.checked) {
+                    completedSteps.push(i);
+                }
+            }
+
+            // 저장할 데이터
+            const recipeData = {
+                sessionId: sessionId,
+                date: new Date().toLocaleDateString(),
+                time: new Date().toLocaleTimeString(),
+                recipe: '비빔밥',
+                servings: currentServing,
+                completedSteps: completedSteps.length,
+                totalSteps: 4,
+                completionRate: Math.round((completedSteps.length / 4) * 100),
+                actions: userActions,
+                totalTime: Math.round((Date.now() - startTime) / 1000) // 총 사용 시간 (초)
+            };
+
+            // Google Sheets로 전송
+            sendToGoogleSheets(recipeData);
+            
+            logUserAction('recipe_complete', completedSteps.length);
+            alert('레시피 완료 데이터가 저장되었습니다!');
+        }
+
+        // Google Sheets로 데이터 전송
+        async function sendToGoogleSheets(data) {
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                    mode: 'no-cors'
+                });
+                
+                console.log('데이터 전송 완료:', data);
+                
+            } catch (error) {
+                console.error('데이터 전송 실패:', error);
+                // 실패 시 브라우저 콘솔에 데이터 출력
+                console.log('저장할 데이터:', data);
+            }
+        }
+
+        // 페이지 로드 시 시작
+        window.onload = function() {
+            console.log('레시피 세션 시작:', sessionId);
+        };
+
   </script>
+
+    
     
 </body>
 </html>
