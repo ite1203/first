@@ -329,18 +329,7 @@
       updateTimerDisplay();
     }
     window.onload = ()=>updateTimerDisplay();
-    
-  // 단계 완료 토글
-        function toggleStep(stepNumber, checkbox) {
-            const step = document.getElementById('step' + stepNumber);
-            
-            if (checkbox.checked) {
-                step.classList.add('completed');
-                logUserAction('step_complete', stepNumber);
-            } else {
-                step.classList.remove('completed');
-                logUserAction('step_uncomplete', stepNumber);
-            }
+
     // =============================================
         // 데이터 수집 기능 (간단 버전)
         // =============================================
@@ -367,15 +356,7 @@
         }
 
         // 완료 데이터 저장
-        function saveRecipeData() {
-            // 완료된 단계 확인
-            const completedSteps = [];
-            for (let i = 1; i <= 4; i++) {
-                const checkbox = document.querySelector(`#step${i} .step-checkbox`);
-                if (checkbox.checked) {
-                    completedSteps.push(i);
-                }
-            }
+        function saveRecipeData() 
 
             // 저장할 데이터
             const recipeData = {
