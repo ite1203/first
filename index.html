@@ -35,6 +35,10 @@
 <body>
   <div class="container">
     <h1>자취생을 위한 레시피북</h1>
+     <div class="save-section">
+            <button class="save-btn" onclick="saveRecipeData()">완료 표시하기</button>
+            <p><small>요리 완료 후 클릭하여 데이터를 저장하세요</small></p>
+        </div>
     
     <select id="recipeSelector" onchange="selectRecipe()">
       <option value="">레시피를 선택하세요</option>
@@ -73,8 +77,7 @@
           <li><input type="checkbox" id="eggStep2"><label for="eggStep2">밥에 버터와 간장을 넣어 비빕니다.</label></li>
           <li><input type="checkbox" id="eggStep3"><label for="eggStep3">반숙 달걀을 올리고 김가루·깨소금을 뿌립니다.</label></li>
         </ol>
-        <!-- 간장버터 계란밥 섹션의 끝부분에 추가 -->
-<button id="complete-egg" onclick="saveRecipeData()" disabled>✅ 완료</button>
+        
       </div>
       <div id="recipe-tuna" class="recipe-content hidden">
         <div class="recipe-header">
@@ -284,6 +287,7 @@
         <button onclick="startTimer()">시작</button>
         <button onclick="pauseTimer()">일시정지</button>
         <button onclick="resetTimer()">초기화</button>
+        
       </div>
     </div>
   </div>
@@ -325,8 +329,18 @@
       updateTimerDisplay();
     }
     window.onload = ()=>updateTimerDisplay();
-  
-  
+    }
+  // 단계 완료 토글
+        function toggleStep(stepNumber, checkbox) {
+            const step = document.getElementById('step' + stepNumber);
+            
+            if (checkbox.checked) {
+                step.classList.add('completed');
+                logUserAction('step_complete', stepNumber);
+            } else {
+                step.classList.remove('completed');
+                logUserAction('step_uncomplete', stepNumber);
+            }
     // =============================================
         // 데이터 수집 기능 (간단 버전)
         // =============================================
