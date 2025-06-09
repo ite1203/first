@@ -323,7 +323,19 @@
       updateTimerDisplay();
     }
     window.onload = ()=>updateTimerDisplay();
+    }
 
+     // 단계 완료 토글
+        function toggleStep(stepNumber, checkbox) {
+            const step = document.getElementById('step' + stepNumber);
+            
+            if (checkbox.checked) {
+                step.classList.add('completed');
+                logUserAction('step_complete', stepNumber);
+            } else {
+                step.classList.remove('completed');
+                logUserAction('step_uncomplete', stepNumber);
+            }
   
     // =============================================
         // 데이터 수집 기능 (간단 버전)
@@ -409,11 +421,5 @@
         };
 
   </script>
-
-    
-    
 </body>
-</html>
-
-
 </html>
