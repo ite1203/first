@@ -73,7 +73,6 @@
           <li><input type="checkbox" id="eggStep2"><label for="eggStep2">밥에 버터와 간장을 넣어 비빕니다.</label></li>
           <li><input type="checkbox" id="eggStep3"><label for="eggStep3">반숙 달걀을 올리고 김가루·깨소금을 뿌립니다.</label></li>
         </ol>
-        
       </div>
       <div id="recipe-tuna" class="recipe-content hidden">
         <div class="recipe-header">
@@ -283,7 +282,6 @@
         <button onclick="startTimer()">시작</button>
         <button onclick="pauseTimer()">일시정지</button>
         <button onclick="resetTimer()">초기화</button>
-        
       </div>
     </div>
   </div>
@@ -325,35 +323,90 @@
       updateTimerDisplay();
     }
     window.onload = ()=>updateTimerDisplay();
+  
+  
+    // =============================================
+        // 데이터 수집 기능 (간단 버전)
+        // =============================================
+        
+        // Google Apps Script URL (학생들이 설정)
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxQcoJkdI1Zf8Eu3QiAQAemtqCNisl9Xc4g-SXX0HbbAHl2WesyXRmF0kH5xkgymEuk/exec';
+        
+        // 사용자 행동 로그
+        let userActions = [];
+        let sessionId = 'recipe_' + Date.now();
+        let startTime = Date.now();
 
+        // 사용자 행동 기록
+        function logUserAction(action, value) {
+            const actionData = {
+                time: new Date().toLocaleTimeString(),
+                action: action,
+                value: value,
+                timeFromStart: Math.round((Date.now() - startTime) / 1000) // 초 단위
+            };
+            
+            userActions.push(actionData);
+            console.log('기록된 행동:', actionData);
+        }
 
-  }
-  function monitorCheckboxes(recipeId) {
-    const container = document.getElementById(`recipe-${recipeId}`);
-    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-    const button = document.getElementById(`complete-${recipeId}`);
+        // 완료 데이터 저장
+        function saveRecipeData() {
+            // 완료된 단계 확인
+            const completedSteps = [];
+            for (let i = 1; i <= 4; i++) {
+                const checkbox = document.querySelector(`#step${i} .step-checkbox`);
+                if (checkbox.checked) {
+                    completedSteps.push(i);
+                }
+            }
 
-    checkboxes.forEach(cb => {
-      cb.addEventListener('change', () => {
-        const allChecked = Array.from(checkboxes).every(c => c.checked);
-        button.disabled = !allChecked;
-      });
-    });
-  }
+            // 저장할 데이터
+            const recipeData = {
+                sessionId: sessionId,
+                date: new Date().toLocaleDateString(),
+                time: new Date().toLocaleTimeString(),
+                recipe: '비빔밥',
+                servings: currentServing,
+                completedSteps: completedSteps.length,
+                totalSteps: 4,
+                completionRate: Math.round((completedSteps.length / 4) * 100),
+                actions: userActions,
+                totalTime: Math.round((Date.now() - startTime) / 1000) // 총 사용 시간 (초)
+            };
 
-  function selectRecipe() {
-    // 기존 레시피 숨기기
-    document.querySelectorAll('.recipe-content').forEach(div => {
-      div.classList.add('hidden');
-    });
+            // Google Sheets로 전송
+            sendToGoogleSheets(recipeData);
+            
+            logUserAction('recipe_complete', completedSteps.length);
+            alert('레시피 완료 데이터가 저장되었습니다!');
+        }
 
-    const selected = document.getElementById("recipeSelector").value;
-    if (selected) {
-      const container = document.getElementById(`recipe-${selected}`);
-      container.classList.remove('hidden');
-      monitorCheckboxes(selected); // 체크 모니터링 시작
-    }
-  }
+        // Google Sheets로 데이터 전송
+        async function sendToGoogleSheets(data) {
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                    mode: 'no-cors'
+                });
+                
+                console.log('데이터 전송 완료:', data);
+                
+            } catch (error) {
+                console.error('데이터 전송 실패:', error);
+                // 실패 시 브라우저 콘솔에 데이터 출력
+                console.log('저장할 데이터:', data);
+            }
+        }
+
+        // 페이지 로드 시 시작
+        window.onload = function() {
+            console.log('레시피 세션 시작:', sessionId);
+        };
 
   </script>
 </body>
